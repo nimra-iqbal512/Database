@@ -1,0 +1,193 @@
+== Topic: 
+Retrieving and Restricting data using SQL SELECT statement
+Understanding wildcards, GROUP BY, ORDER BY
+
+
+== Capabilities of SQL SELECT Statements
+- Projection: Select the columns in a table that are returned by a query. Select as few or as many of the columns are required.
+- Selection: Select the rows in a table that are returned by a query. Various criteria can be used to restrict the rows that are retrieved.
+- Joining: Bringing together data that is stored in different tables by specifying the link between them.(SQL joins we'll cover next).
+
+
+See --> selectStatement.png
+
+- A 'keyword' refers to an individual SQL element. For Example: SELECT and FROM are keywords.
+- A 'clause' is a part of SQL statement. For Example: SELECT name, cnin and so on is a clause.
+- A 'statement' is a combination of two or more clauses. For Example: SELECT name FROM Student is an SQL statement.
+
+- A SELECT statement must include the follow in:
+A SELECT clause, which specifies the columns to be displayed.
+A FROM clause, which identifies the table containing the columns that are listed in the SELECT statement.
+
+== Note:
+- SQL statements are not case-sensitive.
+- SQL statements can be entered on one or more lines.
+- Keywords can't be abbreviated or split across lines.
+- Clauses are usually placed on separate lines.
+- Indents are used to enhance readability.
+- SQL statements can optionally be terminated by a semicolon(;). Semicolons are required when you execute multiple SQL stateents.
+
+
+== SELECT Syntax:
+SELECT * FROM TableName;
+SELECT columnName FROM TableName;
+SELECT column1, column2 FROM TableName;
+
+
+== SELECT TOP / LIMIIT / FETCH FIRST n ROWS ONLY / ROWNUM clauses:
+These are used to specify the number of recordsto return.
+
+- SELECT TOP clause is used in SQL Server / MS Access.
+- LIMIT clause is used in MySQL.
+- FETCH FIRST n ROWS ONLY clause is used in Oracle 12 Syntax.
+- ROWNUM clause is used in Older Oracle Syntax.
+
+
+== SELECT DISTINCT Statement:
+The SELECT DISTINCT statement is used to return  only distinct/ different/ unique values.
+
+Syntax: 
+SELECT DISTINCT column1, column2, ...
+FROM table_name;
+
+
+== COUNT():
+To know the number of entries in a row.
+
+Syntax:
+SELECT COUNT(column_name) FROM table_name;
+
+
+== Count Distinct:
+By using the DISTINCT keyword in a function called COUNT, we can return the number of different values for that column.
+
+Syntax:
+SELECT COUNT(DISTINCT column_name) FROM table_name;
+
+
+== ORDER BY Keyword:
+sort the result set in ascending or descending order.
+The ORDER BY command sorts the result set in ascending order by default. 
+To sort the records in descending order, use the DESC keyword.
+To sort the records in ascending order, use the ASC keyword.
+
+
+== GROUP BY:
+The GROUP BY statement groups rows that have the same values. OR we can say it is used to show all unique values in a column.
+
+The GROUP BY statement is often used with aggregate functions
+i.e. COUNT(), MAX(), MIN(), SUM(), AVG()
+to group the result-set by one or more columns.
+
+GROUP BY Syntax:
+SELECT column_name(S)
+FROM table_name
+WHERE condition
+GROUP BY Column_name(s)
+ORDER BY column_name(s)
+
+
+== GROUP BY with joins (will see when we'll cover join)
+https://www.w3schools.com/sql/sql_groupby.asp
+
+
+== DISTINCT VS GROUP BY(both provides distinct values):
+SELECT Country
+FROM Customers
+GROUP BY Country;
+
+SELECT Country, City
+FROM Customers
+GROUP BY Country, City;
+
+-- Alternate of above two quries
+SELECT DISTINCT Country
+FROM Customers;
+
+SELECT DISTINCT Country, City 
+FROM Customers;
+
+-- If same thing can be achieved through DISTINCT, then why GROUP BY?
+-- DISTINCT only tells unique values in a column.
+-- GROUP BY not only tells unique values, but we can use aggregate functions with it, like COUNT() tells number of entries under each value.
+
+SELECT COUNT(CustomerID), Country
+FROM Customers
+GROUP BY Country;
+
+
+== DISTINCT vs GROUP BY (Comparison)
+= Used for: 
+- DISTINCT: 
+Unique values from a single column(or combination of columns).
+- GROUP BY: 
+Grouped data (by one or more columns) along with aggregate function calculation
+
+= Syntax:
+- DISTINCT: 
+SELECT DISTINCT column1, column2, ...
+FROM table_name;
+- GROUP BY:
+SELECT column1, column2, ... , aggregate_function(column_name)
+FROM table_name
+GROUP BY column1, column2, ... ;
+
+= Goal: 
+- DISTINCT:
+Removes duplicate rows from the result.
+- GROUP BY:
+Groups rows based on specified columns, and use aggregate functions.
+
+= Columns in SELECT:
+- DISTINCT:
+Include only the column(s) for which uniqueness is desired.
+- GROUP BY:
+Include columns specified in GROUP BY clause as well as columns for which aggregate functions are applied.
+
+
+== COUNT(*) vs COUNT(column_name):
+-- COUNT(column_name):
+Counts the number of rows in a group where the specified column_name contains non-NULL values.
+Rows with NULL values in column_name are ignored.
+
+-- COUNT(*):
+Counts all rows in the group, regardless of whether any column contains NULL.
+
+
+===============================
+== Wildcards Characters:
+A wildcard character is used to substitute one or more characters in a string.
+Wildcard characters are used with the LIKE operator. The LIKE operator is used in a WHERE clause to search for a specified pattern in a column.
+
+-- See wildcardCharacters1.png
+-- See wildcardCharacters2.png
+
+Only two wildcard characters are supported in MySQL. 
+1) % (Represents zero or more characters)
+2) _(underscore) (Represents a single character)
+
+-- See MySQLwildcard1.png
+-- See MySQLwildcard2.png
+
+-- See comparisonAndLogicalOperators.png
+
+
+===================
+== COALESCE:
+The COALESCE function in SQL is used to return the first non-NULL value in a list of expressions. If all expressions evaluate to NULL, it returns NULL. It is commonly used to handle NULL values in queries.
+
+- Syntax:
+COALESCE(expression1, expression2, ..., expressionN)
+
+It checks the expressions in order.
+The first non-NULL expression is returned.
+If all expressions are NULL, the result is NULL.
+
+
+================================
+
+
+-- WHERE vs HAVING:
+- WHERE clause is applied before GROUP BY clause, HAVING clause is applied after GROUP BY clause.
+- WHERE caluse filters individual rows, while HVAING clause filters group of rows.
+- WHERE clause can be used with SELECT, UPDATE, DELETE statements. It can be used without GROUP BY clause, but HAVING clause can't be used without GROUP BY clause.
