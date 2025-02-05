@@ -1,0 +1,230 @@
+== Topic: SQL Joins
+
+== JOIN:
+A JOIN clause is used to combine rows from two or more tables, based on a related column between them.
+
+== Different Types of SQL JOINs:
+
+= 1) (INNER) JOIN: Returns records that have matching values in both tables.
+
+= 2) LEFT (OUTER) JOIN: Returns all records from the left table, and the matched records from the right table.
+
+= 3) RIGHT (OUTER) JOIN: Return all records from the right table, and the matched records from the left table.
+
+= 4) FULL (OUTER) JOIN: Returns all records where there is a match in either left or right join.
+
+-- See joins.png
+
+
+== 1) INNER JOIN:
+The INNER JOIN keyword selects records that have matching values in both tables.
+
+- Syntax:
+SELECT column_names(s)
+FROM table1
+INNER JOIN table2
+ON table1.column_name = table2.column_name;
+
+= Naming the columns:
+It is a good practice to include the table name when sprcifying columns in the SQL statement.
+
+SELECT table_name.column1_name, table_name.column2_name, .. , table_name.columnN_name
+FROM table1
+INNER JOIN table2
+ON table1.column_name = table2.column_name;
+
+If we don't include the table_name, and there is column specified which is present in both tables, then it will cause ERROR.
+
+= JOIN or INNER JOIN:
+JOIN and INNER JOIN will return the same result.
+INNER is the default join type for JOIN, so when we write JOIN the parser actually writes INNER JOIN.
+
+- Syntax:
+SELECT table_name.column1_name, table_name.column2_name, .. , table_name.columnN_name
+FROM table1
+JOIN table2
+ON table1.column_name = table2.column_name;
+
+
+== 2) LEFT JOIN / LEFT OUTER JOIN:
+The LEFT JOIN keyword returns all records from the left table (table1), and the matching records from the right table (table2).
+The result is 0 records from the right side, if there is no match.
+
+- Syntax:
+SELECT column_name(s)
+FROM table1
+LEFT JOIN table2
+ON table1.column_name = table2.column_name;
+
+In some databases, LEFT JOIN is called LEFT OUTER JOIN.
+
+- The LEFT JOIN / LEFT OUTER JOIN returns all records from the left table, even if there are no matches in the right table.
+
+
+== 3) RIGHT JOIN / RIGHT OUTER JOIN:
+The RIGHT JOIN keyword returns all records from the right table (table2), and the matching records from the left table (table1). 
+The result is 0 records from the left side, if there is no match.
+
+- Syntax:
+SELECT column_name(s)
+FROM table1
+RIGHT JOIN table2
+ON table1.column_name = table2.column_name;
+
+In some databases, RIGHT JOIN is called RIGHT OUTER JOIN.
+
+- The RIGHT JOIN / RIGHT OUTER JOIN returns all records from the right table, even if there are no matches in the left table.
+
+
+== 4) FULL JOIN / FULL OUTER JOIN:
+The FULL JOIN returns all rows from both tables with NULL values where the JOIN condition is not true.
+
+- Syntax:
+SELECT column_name(s)
+FROM table1
+FULL OUTER JOIN table2
+ON table1.column_name = table2.column_name
+WHERE condition;
+
+FULL OUTER JOIN and FULL JOIN are the same.
+
+FULL OUTER JOIN can potentially return very large result-sets!
+
+The FULL OUTER JOIN keyword returns all matching records from both tables whether the other table matches or not.
+So, if there are rows in table1 that do not have matches in table2, or if there are rows in table2 that do not have matches in table1, those rows will be listed as well with NULL values.
+
+- FULL JOIN / FULL OUTER JOIN in MySQL:
+The above syntax not work in MySQL because MySQL not directly support a FULL OUTER JOIN. Instead we can achieve it by combining a LEFT JOIN, a RIGHT JOIN, and a UNION operator
+
+- Correct Syntax1:
+SELECT column_name(s)
+FROM table1
+LEFT JOIN table2
+ON table1.column_name = table2.column_name
+UNION
+SELECT column_name(s)
+FROM table1
+RIGHT JOIN table2
+ON table1.column_name = table2.column_name
+
+- Correct Syntax2:
+SELECT column_name(s)
+FROM table1
+LEFT JOIN table2
+ON table1.column_name = table2.column_name
+UNION
+SELECT column_name(s)
+FROM table2
+LEFT JOIN table1
+ON table1.column_name = table2.column_name
+
+- Correct Syntax3:
+SELECT column_name(s)
+FROM table1
+RIGHT JOIN table2
+ON table1.column_name = table2.column_name;
+UNION
+SELECT column_name(s)
+FROM table2
+RIGHT JOIN table1
+ON table1.column_name = table2.column_name;
+
+
+
+============================
+Some Additional Info:
+
+== NATURAL JOIN:
+- Natural join is an opertion that creates a join on the base of the common operations in the tables. 
+- To perform natural joins, there must be one common attribute(column) between the tables.
+- Synatx:
+    SELECT *
+    FROM TABLE1
+    NATURAL JOIN TABLE2;
+
+
+== Natural Join VS Inner Join:
+- Natural join joins two tables based on the same attribute name and datatypes. The resulting table contains all the attributes of both the table, but contain only one copy of each common column.
+- Inner Join joins two tables on the basis of the column which is explicitly specified in the ON clause. The resulting table will contain all the attributes from both tables including the common column also.
+
+
+== Self Join:
+A sel join is simply a regular join operation where a table is joined with itself. This allows us to compare rows within the same table.
+- Syntax:
+	SELECT columns
+	FROM table AS alias1
+	JOIN table AS alias2 ON alias1.column = alias2.column;
+
+== Cross Join:
+- Cross Join produces a result set that contains the cartesian product of two or more tables. Cross join is also called Cartesian Join.
+- Syntax:
+    SELECT * FROM table1
+    CROSS JOIN table2;
+- Note: When CROSS JOIN is used with a WHERE clause, it behaves like INNER JOIN, filtering the results based on specific conditions.
+- Note: When JOIN/INNER JOIN is used without a WHERE clause, it behaves like CROSS JOIN. (But only for JOIN/INNER JOIN, not for LEFT or RIGHT JOIN).
+
+- Example:
+CREATE TABLE Products (
+    product_id INT PRIMARY KEY,
+    product_name VARCHAR(50),
+    price DECIMAL(10, 2)
+);
+
+CREATE TABLE Suppliers (
+    supplier_id INT PRIMARY KEY,
+    supplier_name VARCHAR(50),
+    country VARCHAR(50)
+);
+
+INSERT INTO Products (product_id, product_name, price) VALUES
+(1, 'Laptop', 800.00),
+(2, 'Smartphone', 500.00),
+(3, 'Tablet', 300.00);
+
+INSERT INTO Suppliers (supplier_id, supplier_name, country) VALUES
+(101, 'TechCorp', 'USA'),
+(102, 'GadgetPro', 'Germany');
+
+SELECT * 
+FROM Products
+CROSS JOIN Suppliers;
+-- JOIN Suppliers;
+-- INNER JOIN Suppliers; 
+
+
+== JOIN VS UNION
+-- JOIN:
+- JOIN combines data from many tables based based on a matched condition between them.
+- It combines data into new columns
+- The number of columns selected from each table may not be the same.
+- Datatypes of corresponding columns selected from each table can be different.
+- It may not return distinct columns.
+
+-- UNION:
+- SQL combines the result set of two or more SELECT statements.
+- It combines data into two rows.
+- The number of columns selected feom each table should be same.
+- The data types of corresponding columns selected from each table should be the same.
+- It returns distinct rows.
+
+-- Summary (JOIN VS UNION):
+- JOIN is used to combine rows from two or more tables based on a related column, while UNION is used to combine the results of two or more SELECT statements into a single result set.
+
+
+== UNION VS UNION ALL:
+- UNION: combines the results of multiple SELECT statements while removing duplicate rows.
+- UNION ALL: combines the results without removing duplicates.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
