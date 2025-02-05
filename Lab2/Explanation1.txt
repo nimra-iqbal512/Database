@@ -1,0 +1,190 @@
+== SQL vs MySQL
+- MySQL is an open-source relational database management system we can interact with using Structured Query Language (SQL).
+- SQL is a language used to manage and manipulate relational databases. While SQL is a Relational Database Management System (RDBMS) that uses SQL.
+- SQL is a standard language (like English) for databases. MySQL is a software application (like Microsoft Word for documents).
+
+== SQL Commands: https://www.geeksforgeeks.org/sql-ddl-dql-dml-dcl-tcl-commands/
+SQL Commands are like instructions. These are used to interact with database and perform operations.
+SQL commands can perform various tasks like creating a table, adding data to tables, dropping the table, modifying the table, set permission for users.
+
+-- SQL Commands are mainly categorized into five categories.
+DDL - Data Definition Language
+DQL - Data Query Language
+DML - Data Manipulation Language
+DCL - Data Control Language
+TCL - Transaction Control Language
+
+See SQLcommands.png
+
+-- 1) 
+Data Definition Language(DDL): 
+DDL consists of commands that can be  used for defining(creating), altering, deleting database structures such as tables, indexes, and schemas.
+It also defines indexes(keys), specify links between tables, and impose constraints between tables.
+
+Common DDL Commands:
+
+- CREATE(CREATE DATABASE, CREATE TABLE, CREATE INDEX)
+It creates database or its objects(table, index, function, views, store procedures, and triggers).
+- Syntax:
+CREATE TABLE table_name(
+  column1 data_type,
+  column2 data_type,
+  ...
+);
+
+- DROP(DROP TABLE, DROP INDEX)
+Delete objects from the database.
+- Syntax:
+DROP TABLE table_name;
+
+- ALTER(ALTER DATABASE, ALTER TABLE)
+Alter the structure of databse.
+- Syntax:
+ALTER TABLE table_name 
+ADD COLUMN column_name data_type;
+
+- TRUNCATE
+Remove all records from a table, including all spaces allocated for the records are removed.
+- Syntax:
+TRUNCATE TABLE table_name;
+
+- COMMENT
+Add comments to the data dictionary
+- Syntax:
+COMMENT 'comment_text' ON TABLE table_name;
+
+- RENAME
+Rename an object existing in the database.
+- Syntax:
+RENAME TABLE old_table_name TO new_table__name;
+
+
+-- 2)
+Data Query Language(DQL): 
+SELECT is the DQL command. 
+DQL statements are used for performing queries on the data within schema objects. When a SELECT is fired against a table or tables, the result is compiled into a further temporary table, which is displayed or perhaps received by the program.
+
+- SELECT
+It is uaed to retrieve data from the database.
+- Syntax:
+SELECT column1, column2, ... 
+FROM table_name 
+WHERE condition;
+
+
+-- 3)
+Data Manipulation Language(DML):
+These SQL commands deal with the manipulation of data present in the database. It includes most of the SQL statements.
+(It is the component of SQL statement that controls access to data and to the database. Basically, DCL statements are grouped with DML statemnets.(Not know about it in detail))
+
+Common DML Commands:
+
+- INSERT
+Insert data into a table
+- Synatx:
+INSERT INTO table_name(column1, column2, ...)
+VALUES (value1, value2, ...);
+
+- UPDATE
+Update existing data within a table
+- Synatx:
+UPDATE table_name
+SET column1 = value1, column2 = value2
+WHERE condition;
+
+- DELETE
+Delete records from a database table
+- Synatx:
+DELETE FROM table_name
+WHERE condition;
+
+- LOCK
+Table control concurrency
+- Synatx:
+LOCK TABLE table_name
+IN lock_mode;
+
+- CALL
+Call a PL/SQL or Java subprogram
+- Synatx:
+CALL procedure_name(arguments);
+
+- EXPLAIN PLAN
+Describe the access path to data
+- Synatx:
+EXPLAIN PLAN FOR SELECT * FROM table_name;
+
+
+-- 4):
+Data Control Language(DCL):
+DCL includes commands such as GRANT and REVOKE which mainly deals with the 
+rights, permissions, and other controls of the database system.
+These commands are used to control access to data  in the database by granting  or revoking permissions.
+
+Common DCL Commands:
+
+- GRANT
+Assigns new privileges to a user account, allowing access to specific database objects, actions, or functions.
+
+- REVOKE
+Removes previously granted privileges from a user account, taking away their access to certain database objects or actions.
+
+
+-- 5):
+Transaction Control Language(TCL):
+SQL commands that help to manage transactions that take place in a database.
+Transactions group a set of tasks into a single execution unit. Each transaction begins with a single task, and ends when all the tasks in a group are successfully completed. If any of the tasks fail, the transaction fails. Therefore, a transaction has only two results: success or failure.
+
+Common TCL Commands:
+
+- UPDATE TRANSACTION
+Starts a new transaction
+
+- COMMIT:
+Saves all changes made during the transaction
+
+- ROLLBACK:
+Undoes all changes made during the transaction
+
+- SAVEPOINT: 
+Creates a savepoint within the current transaction
+
+
+=============================================
+== ALTER VS UPDATE
+
+= ALTER
+- ALTER SQL command is a DDL(Data Definition Language) statement.
+- It is used to update the structure of table in the database (like add, delete, modify the attributes of the table in the database).
+- Syntax:
+ALTER TABLE table_name
+DROP COLUMN column_name
+
+= UPDATE
+- UPDATE SQL command is a DML(Data Manipulation Language) statement.
+- It is used to manipulate the data of any existing column. But don't change the table's definition.
+- Syntax:
+UPDATE table_name
+SET column1 = value1, column2 = value2, .., column = valueN
+WHERE condition;
+
+
+=============================================
+== DELETE VS TRUNCATE VS DROP
+
+= DELETE:
+removes specific rows from a table based on a WHERE condition.
+- Syntax:
+DELETE FROM table_name WHERE condition;
+DELETE FROM table_name; (Not using WHERE will remove all records from the table just like TRUNCATE)
+
+== TRUNCATE:
+Quickly removes all rows from a table. (faster than DELETE).
+- Syntax:
+TRUNCATE TABLE table_name;
+
+== DROP:
+Deletes an entire table along with its structure(schema). It also removes any dependencies like indexes and constraints.
+- Syntax:
+DROP TABLE table_name;
+

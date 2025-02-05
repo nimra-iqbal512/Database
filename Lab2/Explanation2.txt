@@ -1,0 +1,208 @@
+== 
+-- Create Student Table:
+CREATE TABLE Student(
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	Name VARCHAR(255),
+	Reg_No VARCHAR(255),
+	Courses VARCHAR(255),
+	Course_Code INT,
+	Offered_by VARCHAR(255)
+);
+
+-- Inserting data without specifying column names:
+INSERT INTO Student
+VALUES('Kaneez', '2345', 'Science', 1234, 'Govt.');
+
+-- As id is auto incremented, then why its giving error?
+The error occurs because in your INSERT statement, you're not specifying the column names, so MySQL tries to insert values into all columns, including the id column. Since id is AUTO_INCREMENT, you must either:
+
+1) Exclude the id column in the INSERT query
+INSERT INTO Student(Name, Reg_No, Courses, Course_Code, Offered_by)
+VALUES('Kaneez', '2345', 'Science', 1234, 'Govt.');
+
+2) Use NULL or DEFAULT for the id value explicitly.
+INSERT INTO Student(id, Name, Reg_No, Courses, Course_Code, Offered_by)
+VALUES(DEFAULT, 'Kaneez', '2345', 'Science', 1234, 'Govt.');
+INSERT INTO Student(id, Name, Reg_No, Courses, Course_Code, Offered_by)
+VALUES(NULL, 'Kaneez', '2345', 'Science', 1234, 'Govt.');
+
+-- Key Notes:
+1) AUTO_INCREMENT columns automatically generate unique values only if you don't explicitly provide a value for the column during insertion.
+2) If you specify a value for id, MySQL will use the provided value instead of auto-generating one. However, this can lead to errors or unexpected behavior if the value already exists or violates constraints.
+
+
+==
+-- How primary key can have NULL value as in above example?
+When you define a column as a primary key:
+CREATE TABLE Example (
+    id INT PRIMARY KEY
+);
+MySQL automatically applies both:
+i- UNIQUE constraint (ensures no duplicates).
+ii- NOT NULL constraint (ensures no NULL values).
+
+If you attempt to insert a NULL value into a primary key column, MySQL will throw an error:
+INSERT INTO Example (id) VALUES (NULL);
+-- Error: Column 'id' cannot be null
+
+-- If you have a scenario where a column might have NULL values but still need uniqueness when values are present:
+1) Use a unique key instead of a primary key:
+CREATE TABLE Example (
+    id INT UNIQUE
+);
+Here, id can be NULL, but any non-NULL values must be unique.
+2) Use a composite key where one of the columns can be non-NULL:
+CREATE TABLE Example (
+    id INT,
+    other_column INT NOT NULL,
+    PRIMARY KEY (id, other_column)
+);
+In this case, id can be NULL, but the combination of id and other_column must be unique.
+
+-- How AUTO_INCREMENT Works?
+CREATE TABLE Student(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(255),
+    Reg_No VARCHAR(255),
+    Courses VARCHAR(255),
+    Course_Code INT,
+    Offered_by VARCHAR(255)
+);
+The id column is defined as AUTO_INCREMENT, which means MySQL will automatically assign the next unique integer value for this column if:
+- No value is specified for id in the INSERT statement, or
+- A NULL or DEFAULT value is explicitly provided.
+
+-- What Happens When NULL is Provided?
+INSERT INTO Student
+VALUES(NULL, 'Ali', '2345', 'Science', 1234, 'Govt.');
+- MySQL interprets the NULL for the id column as an instruction to generate the next value in the AUTO_INCREMENT sequence.
+- The id column gets the next available integer from the sequence, e.g., 1, 2, etc.
+
+If you want to avoid explicitly specifying NULL, you can explicitly specify column names, and skip the id column in the INSERT statement:
+INSERT INTO Student(Name, Reg_No, Courses, Course_Code, Offered_by)
+VALUES('Ali', '2345', 'Science', 1234, 'Govt.');
+
+
+== 
+-- Why error?
+UPDATE Student
+SET Name = 'Aliya', Reg_No = '11'
+WHERE Name = 'Ali' AND Courses = 'Science'; 
+ERROR: You are using safe update mode and you tried to update a table without a WHERE that uses a KEY column.  To disable safe mode, toggle the option in Preferences -> SQL Editor and reconnect.
+
+-- Solutions:
+1. Disable Safe Update Mode Temporarily
+2. Modify the Query to Include a Key Column
+3. Disable Safe Update Mode in Workbench Settings
+
+
+==
+-- Can we update the primary key value?
+Yes
+
+-- Conditions for Updating a Primary Key
+- Unique Constraint: The new primary key value (id = 5 in your case) must not already exist in the table. If the table has a record with id = 5, you will get a duplicate entry error.
+- Foreign Key Constraints: If the id is referenced as a foreign key in another table, updating the primary key may result in a foreign key constraint violation unless the 'ON UPDATE' rule for the foreign key is set to 'CASCADE' or 'SET NULL'.
+
+-- Important Notes
+- Caution: Changing a primary key might cause inconsistencies in related tables if foreign key relationships exist.
+- Best Practice: Avoid updating primary key values unless absolutely necessary. Use a surrogate key (like AUTO_INCREMENT) and avoid relying on natural keys if frequent updates are expected.
+
+-- Surrogate key:
+A surrogate key is an artificially created, unique identifier for a record in a database table. It is used as the primary key and has no inherent meaning or business context outside of uniquely identifying a row. Surrogate keys are typically generated by the database system itself, such as using AUTO_INCREMENT in MySQL.
+
+
+==
+-- Difference between BETWEEN and IN operators in SQL:
+- BETWEEN: Between an inclusive range
+- IN: If you know the exact value you want to return for at least one of the columns
+
+ID	Name	Age	Grade
+1	Alice	15	9
+2	Bob	17	11
+3	Charlie	16	10
+4	Diana	14	8
+5	Edward	17	11
+
+-- Using BETWEEN:
+The 'BETWEEN' operator selects values within a specified range. It is inclusive of both boundary values.
+SELECT * 
+FROM Students
+WHERE Age BETWEEN 15 AND 17;
+
+
+-- Using IN:
+The IN operator matches values in a specific list.
+SELECT * 
+FROM Students
+WHERE Age IN (14, 16, 17);
+
+
+-- Key Differences:
+Feature		BETWEEN					IN
+
+Purpose:	Filters based on a range of values.	Filters based on a 							specific list of 							values.
+
+Use Case:	When working with continuous data 	When working with 		(e.g., age, dates, salary).		discrete values 							(e.g., specific 							IDs, names, 								grades).
+
+Inclusivity:	Includes the boundary values.		Matches exactly the 							values listed.
+
+Flexibility:	Cannot specify non-continuous values.	Allows a custom 							list of values.
+
+-- Combined Use:
+Both can be combined in complex queries for greater flexibility.
+SELECT * 
+FROM Students
+WHERE Age BETWEEN 15 AND 17
+  AND Grade IN (9, 10);
+
+
+== In below table definition, find error:
+CREATE TABLE StudentCourse(
+	Name VARCHAR(255),
+	Reg_No INT AUTO_INCREMENT,
+	Courses VARCHAR(255),
+	Course_Code INT,
+	Offered_by VARCHAR(255)
+);
+
+-- Error:
+In SQL, the AUTO_INCREMENT property is typically used with a PRIMARY KEY or UNIQUE constraint to ensure that each value is unique.
+
+-- Solution:
+CREATE TABLE StudentCourse(
+	Name VARCHAR(255),
+	Reg_No INT UNIQUE AUTO_INCREMENT,
+	Courses VARCHAR(255),
+	Course_Code INT,
+	Offered_by VARCHAR(255)
+);
+
+CREATE TABLE StudentCourse (
+    Name VARCHAR(255),
+    Reg_No INT AUTO_INCREMENT PRIMARY KEY,
+    Courses VARCHAR(255),
+    Course_Code INT,
+    Offered_by VARCHAR(255)
+);
+
+
+==  Entity Integrity/Semantic Integrity/Referential Integrity:
+= Entity Integrity:
+Each entity is represented by a table. To identify each row in a table, the table must have a primary key. The primary key is a unique value that identifies each row. This requirement is called the entity integrity constraint.
+
+= Semantic Integrity:
+Semantic integrity ensures that data entered into a row reflects an allowable value for that row. 
+The value must be within the domain, or allowable set of values, for that column. For example, the quantity column of the items table permits only numbers. If a value outside the domain can be entered into a column, the semantic integrity of the data is violated.
+The following constraints enforce semantic integrity:
+Data type
+    The data type defines the types of values that you can store in a column. For example, the data type SMALLINT allows you to enter values from -32,767 to 32,767 into a column.
+Default value
+    The default value is the value inserted into the column when an explicit value is not specified. For example, the user_id column of the cust_calls table defaults to the login name of the user if no name is entered.
+Check constraint
+    The check constraint specifies conditions on data inserted into a column. Each row inserted into a table must meet these conditions. For example, the quantity column of the items table might check for quantities greater than or equal to one.
+
+= Referential Integrity:
+Referential integrity refers to the relationship between tables. Because each table in a database must have a primary key, this primary key can appear in other tables because of its relationship to data within those tables. When a primary key from one table appears in another table, it is called a foreign key.
+// See constraints.png
+
