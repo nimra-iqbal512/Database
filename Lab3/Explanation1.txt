@@ -1,0 +1,72 @@
+== Topic: Constraint, Primary key, Foreign key
+
+The following are the commonly used constraints used in SQL.
+
+-- 1) NOT NULL
+Ensures that a column cannot have a NULL value.
+- Syntax:
+CREATE TABLE Persons(
+  ID int NOT NULL,
+  LastName varchar(255) NOT NULL,
+  FirstName varchar(255) NOT NULL,
+  Age int
+);
+
+
+-- 2) UNIQUE
+Ensures that all values in a column are different. But it can also accept NULL values.
+
+
+-- UNIQUE vs PRIMARY KEY:
+In a table, there can be several 'UNIQUE' constraints, but only one 'PRIMARY KEY' constraint.
+Both ensures uniqueness, but 'UNIQUE' constraint may accepts NULL values while 'PRIMARY KEY' nnt allow NULL values.
+
+
+-- 3) PRIMARY KEY
+A combination of a NOT NULL and UNIQUE. Uniquely identifies each row in a table.
+Each table has only one Primary Key. The value of Primary key can't be NULL. The system will not allow inserting a row with a primary key which already exists in the table.
+
+- Composite Primary Key:
+The primary key can be a combination of multiple columns. This combination is known as Composite Primary Key.
+The Primary key can have a maximum of 16 columns.
+
+
+-- 4) FOREIGN KEY
+It prevents actions that would destroy links between tables.
+A FOREIGN KEY is a field (or collection of fields) in one table, that refers to the PRIMARY KEY in another table.
+The table with the foreign key is called the child table, and the table being referenced (tabe with the primary key against foreign key) is called referenced or parent table.
+Foreign Key must refers to the Primary Key in some other table, or it may be NULL.    
+
+- Referential Integrity: ??? 
+The foreign key in child table references the primary key in the parent table.
+This parent-child relationship enforces the rule which is known as "Referential Integrity."
+Referential integrity is a property of data stating that all its references are valid. In the context of relational databases, it requires that if a value of one attribute (column) of a relation (table) references a value of another attribute (either in the same or a different relation), then the referenced value must exist.    
+(Need to explore in more detail may be).          
+
+
+-- 5) CHECK
+It is used to limit the value range that can be placed in a column. It ensures that the values in a column satisfies a specific condition.
+
+
+-- 6) DEFAULT
+Sets a default value for a column if no value is specified.
+
+
+== ADD, MODIFY, DROP columns in Lab3Tasks.sql
+
+
+== Question:
+-- If Primary key is composite key, then can any one them can be NULL?
+- No in a composite key, not any of the key be NULL.
+CREATE TABLE Course_Enrollment (
+    student_id INT,
+    course_id INT,
+    enrollment_date DATE,
+    PRIMARY KEY (student_id, course_id) -- Composite Primary Key
+);
+
+INSERT INTO Course_Enrollment
+VALUES (NULL, 110, '2024-09-01');  --ERROR! Column 'student_id' cannot be null
+
+
+
