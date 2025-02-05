@@ -1,0 +1,49 @@
+== Subquery:
+A subquery is embedded inside another query. It is also called inner query. 
+Subquery can be used with an outer query, which is used as input to the outerquery. It can be used with SELECT, FROM, and WHERE clauses. Subquery is executed first before the execution of the outer query.
+Subqueries are written within parenthesis.
+
+
+== Subquery with WHERE statemnt(Comaprison Operators):
+Return type:
+Subquery returns a single value.
+Usage:
+Mostly aggregate functions are seen in sub query.
+
+== Subquery with WHERE statemnt(IN and NOT IN Operators):
+Return type:
+Subquery returns a single column, but many rows.
+
+-- Subquery returning NULL values, NOT IN operator
+If subquery contains NULL values, the NOT IN operator might behave unexpectedly(returns no result). So its better to exclude NULL values explicitly.
+
+Exmaple:
+INSERT INTO Departments 
+VALUES (4,NULL);
+
+-- (Now below query return no result)
+SELECT *
+FROM Employee
+WHERE department NOT IN (SELECT department FROM Departments);
+
+-- Working correctly
+SELECT *
+FROM Employee
+WHERE department NOT IN (
+    SELECT department 
+    FROM Departments 
+    WHERE department IS NOT NULL
+);
+
+== Subquery with FROM statemnt:
+Return type:
+Subquery returns a table, having multiple rows and columns. This table is called a 'derived table', 'inline view' or 'materialized subquery'. It acts like a temporary table.
+Note: 
+We must need to assign an alias to the subquery result for reference in the outer query.
+
+== Window Functions:
+
+
+
+Correlated Subquery:
+Correlated Subquery is the one which uses columns from outer table for execution.
