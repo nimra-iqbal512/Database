@@ -57,7 +57,7 @@ CREATE TABLE Example (
     other_column INT NOT NULL,
     PRIMARY KEY (id, other_column)
 );
-In this case, id can be NULL, but the combination of id and other_column must be unique.
+In this case, two rows can have same values for id, but the combination of id and other_column must be unique.
 
 -- How AUTO_INCREMENT Works?
 CREATE TABLE Student(
