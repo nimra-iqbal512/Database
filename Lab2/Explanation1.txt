@@ -1,7 +1,7 @@
 == SQL vs MySQL
-- MySQL is an open-source relational database management system we can interact with using Structured Query Language (SQL).
-- SQL is a language used to manage and manipulate relational databases. While SQL is a Relational Database Management System (RDBMS) that uses SQL.
 - SQL is a standard language (like English) for databases. MySQL is a software application (like Microsoft Word for documents).
+- MySQL is an open-source relational database management system we can interact with using Structured Query Language (SQL).
+- SQL is a language used to manage and manipulate relational databases. While MySQL is a Relational Database Management System (RDBMS) that uses SQL.
 
 == SQL Commands: https://www.geeksforgeeks.org/sql-ddl-dql-dml-dcl-tcl-commands/
 SQL Commands are like instructions. These are used to interact with database and perform operations.
